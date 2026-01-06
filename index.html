@@ -41,78 +41,80 @@
 
         .stats-section {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 15px;
-            margin-bottom: 30px;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+            margin-bottom: 20px;
         }
 
         .stat-card {
             background: rgba(255, 255, 255, 0.15);
             backdrop-filter: blur(10px);
-            border-radius: 15px;
-            padding: 20px;
-            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            padding: 8px 4px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
             text-align: center;
         }
 
         .stat-icon {
-            font-size: 2em;
-            margin-bottom: 10px;
+            font-size: 1.2em;
+            margin-bottom: 3px;
         }
 
         .stat-label {
             color: rgba(255, 255, 255, 0.8);
-            font-size: 0.9em;
-            margin-bottom: 5px;
+            font-size: 0.6em;
+            margin-bottom: 2px;
+            line-height: 1.1;
         }
 
         .stat-value {
             color: #fff;
-            font-size: 2em;
+            font-size: 1.3em;
             font-weight: bold;
             text-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
         }
 
         .stat-streak {
             color: #4ade80;
-            font-size: 1.2em;
-            margin-top: 5px;
+            font-size: 0.65em;
+            margin-top: 1px;
         }
 
         .calendar-section {
             background: rgba(255, 255, 255, 0.15);
             backdrop-filter: blur(10px);
             border-radius: 15px;
-            padding: 25px;
+            padding: 15px;
             border: 2px solid rgba(255, 255, 255, 0.2);
             margin-bottom: 20px;
         }
 
         .calendar-header {
             display: flex;
-            justify-content: space-between;
+            flex-direction: column;
             align-items: center;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
+            gap: 10px;
         }
 
         .calendar-header h2 {
             color: #fff;
-            font-size: 1.5em;
+            font-size: 1.3em;
         }
 
         .month-nav {
             display: flex;
-            gap: 10px;
+            gap: 8px;
         }
 
         .month-nav button {
-            padding: 8px 15px;
+            padding: 6px 12px;
             background: rgba(255, 255, 255, 0.2);
             border: 1px solid rgba(255, 255, 255, 0.3);
             border-radius: 8px;
             color: #fff;
             cursor: pointer;
-            font-size: 1em;
+            font-size: 0.85em;
             transition: all 0.3s;
         }
 
@@ -123,28 +125,29 @@
         .calendar-grid {
             display: grid;
             grid-template-columns: repeat(7, 1fr);
-            gap: 10px;
+            gap: 5px;
         }
 
         .day-header {
             text-align: center;
             color: rgba(255, 255, 255, 0.7);
             font-weight: bold;
-            padding: 10px;
-            font-size: 0.9em;
+            padding: 5px;
+            font-size: 0.75em;
         }
 
         .day-cell {
             aspect-ratio: 1;
             background: rgba(255, 255, 255, 0.1);
-            border-radius: 10px;
-            padding: 8px;
+            border-radius: 8px;
+            padding: 4px;
             cursor: pointer;
             transition: all 0.3s;
             border: 2px solid transparent;
             display: flex;
             flex-direction: column;
             position: relative;
+            min-height: 50px;
         }
 
         .day-cell:hover {
@@ -184,26 +187,26 @@
         .day-number {
             color: #fff;
             font-weight: bold;
-            margin-bottom: 5px;
-            font-size: 0.9em;
+            margin-bottom: 3px;
+            font-size: 0.75em;
         }
 
         .substance-icons {
             display: flex;
             flex-wrap: wrap;
-            gap: 3px;
+            gap: 2px;
             justify-content: center;
             flex: 1;
         }
 
         .substance-badge {
-            padding: 3px 6px;
-            border-radius: 5px;
-            font-size: 0.75em;
+            padding: 2px 4px;
+            border-radius: 4px;
+            font-size: 0.6em;
             font-weight: bold;
             display: flex;
             align-items: center;
-            gap: 3px;
+            gap: 2px;
         }
 
         .substance-badge.alcohol {
@@ -346,6 +349,16 @@
             box-shadow: 0 5px 15px rgba(34, 197, 94, 0.4);
         }
 
+        .btn-reset {
+            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+            color: #fff;
+        }
+
+        .btn-reset:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(245, 158, 11, 0.4);
+        }
+
         .reward-list {
             display: grid;
             gap: 10px;
@@ -375,16 +388,65 @@
                 font-size: 1.8em;
             }
 
+            .stats-section {
+                grid-template-columns: repeat(4, 1fr);
+                gap: 6px;
+            }
+
+            .stat-card {
+                padding: 6px 3px;
+            }
+
+            .stat-icon {
+                font-size: 1em;
+            }
+
+            .stat-label {
+                font-size: 0.55em;
+            }
+
+            .stat-value {
+                font-size: 1.1em;
+            }
+
+            .stat-streak {
+                font-size: 0.6em;
+            }
+
+            .calendar-section {
+                padding: 10px;
+            }
+
             .calendar-grid {
-                gap: 5px;
+                gap: 3px;
             }
 
             .day-cell {
-                padding: 5px;
+                padding: 3px;
+                min-width: 0;
+                min-height: 45px;
             }
 
-            .stats-section {
-                grid-template-columns: 1fr;
+            .day-number {
+                font-size: 0.7em;
+            }
+
+            .substance-badge {
+                font-size: 0.55em;
+                padding: 1px 3px;
+            }
+
+            .question-mark {
+                font-size: 1.3em;
+            }
+
+            .calendar-header h2 {
+                font-size: 1.1em;
+            }
+
+            .month-nav button {
+                padding: 5px 10px;
+                font-size: 0.8em;
             }
         }
     </style>
@@ -663,7 +725,7 @@
         }
 
         function showEditModal(dateKey, dayData) {
-            const date = new Date(dateKey);
+            const date = new Date(dateKey + 'T00:00:00');
             const modal = document.createElement('div');
             modal.className = 'modal-overlay';
             modal.innerHTML = `
@@ -686,7 +748,8 @@
                         <input type="number" id="nicotineInput" value="${dayData.nicotine}" min="0" placeholder="Number of servings">
                     </div>
                     
-                    <div class="modal-buttons">
+                    <div class="modal-buttons three-buttons">
+                        <button class="btn-reset" onclick="resetDayData('${dateKey}')">Reset to 0</button>
                         <button class="btn-primary" onclick="saveDayData('${dateKey}')">Save</button>
                         <button class="btn-secondary" onclick="closeModal()">Cancel</button>
                     </div>
@@ -695,26 +758,40 @@
             document.body.appendChild(modal);
         }
 
+        function resetDayData(dateKey) {
+            document.getElementById('alcoholInput').value = '0';
+            document.getElementById('weedInput').value = '0';
+            document.getElementById('nicotineInput').value = '0';
+        }
+
         function saveDayData(dateKey) {
             const alcohol = parseInt(document.getElementById('alcoholInput').value) || 0;
             const weed = parseInt(document.getElementById('weedInput').value) || 0;
             const nicotine = parseInt(document.getElementById('nicotineInput').value) || 0;
             
-            const wasNewCleanDay = !data[dateKey] && alcohol === 0 && weed === 0 && nicotine === 0;
+            const wasNewEntry = !data[dateKey];
+            const isCleanEntry = alcohol === 0 && weed === 0 && nicotine === 0;
+            
+            // Get streak BEFORE saving
             const previousCleanStreak = calculateStreak(d => d.alcohol === 0 && d.weed === 0 && d.nicotine === 0);
             
+            // Save the data
             data[dateKey] = { alcohol, weed, nicotine };
             saveData();
             closeModal();
-            
-            // Check if this was a clean day entry
-            if (wasNewCleanDay) {
-                const newCleanStreak = calculateStreak(d => d.alcohol === 0 && d.weed === 0 && d.nicotine === 0);
-                checkMilestone(newCleanStreak, previousCleanStreak);
-                showRewardModal();
-            }
-            
             renderCalendar();
+            
+            // Show celebration if this was a new clean day entry
+            if (wasNewEntry && isCleanEntry) {
+                // Small delay to let calendar render
+                setTimeout(() => {
+                    showRewardModal();
+                    
+                    // Calculate new streak and check for milestone
+                    const newCleanStreak = calculateStreak(d => d.alcohol === 0 && d.weed === 0 && d.nicotine === 0);
+                    checkMilestone(newCleanStreak, previousCleanStreak);
+                }, 100);
+            }
         }
 
         function checkMilestone(newStreak, oldStreak) {
@@ -722,7 +799,10 @@
             
             for (const milestone of milestones) {
                 if (newStreak >= milestone && oldStreak < milestone) {
-                    showMilestoneModal(milestone);
+                    // Delay milestone modal so it shows after the reward modal
+                    setTimeout(() => {
+                        showMilestoneModal(milestone);
+                    }, 500);
                     break;
                 }
             }
