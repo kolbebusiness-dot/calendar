@@ -1,0 +1,776 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Substance Tracker</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 50%, #7e8ba3 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            text-align: center;
+            color: #fff;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .subtitle {
+            text-align: center;
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 1.1em;
+            margin-bottom: 30px;
+        }
+
+        .stats-section {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 20px;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            text-align: center;
+        }
+
+        .stat-icon {
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+
+        .stat-label {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 0.9em;
+            margin-bottom: 5px;
+        }
+
+        .stat-value {
+            color: #fff;
+            font-size: 2em;
+            font-weight: bold;
+            text-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        .stat-streak {
+            color: #4ade80;
+            font-size: 1.2em;
+            margin-top: 5px;
+        }
+
+        .calendar-section {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 25px;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            margin-bottom: 20px;
+        }
+
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .calendar-header h2 {
+            color: #fff;
+            font-size: 1.5em;
+        }
+
+        .month-nav {
+            display: flex;
+            gap: 10px;
+        }
+
+        .month-nav button {
+            padding: 8px 15px;
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 8px;
+            color: #fff;
+            cursor: pointer;
+            font-size: 1em;
+            transition: all 0.3s;
+        }
+
+        .month-nav button:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 10px;
+        }
+
+        .day-header {
+            text-align: center;
+            color: rgba(255, 255, 255, 0.7);
+            font-weight: bold;
+            padding: 10px;
+            font-size: 0.9em;
+        }
+
+        .day-cell {
+            aspect-ratio: 1;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 2px solid transparent;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        .day-cell:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: scale(1.05);
+        }
+
+        .day-cell.today {
+            border-color: #fbbf24;
+            box-shadow: 0 0 15px rgba(251, 191, 36, 0.5);
+        }
+
+        .day-cell.other-month {
+            opacity: 0.3;
+        }
+
+        .day-cell.clean-day {
+            background: linear-gradient(135deg, #4ade80 0%, #22c55e 100%);
+            border-color: #16a34a;
+        }
+
+        .day-cell.untracked {
+            border: 2px dashed rgba(251, 191, 36, 0.6);
+            background: rgba(251, 191, 36, 0.1);
+        }
+
+        .question-mark {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 2em;
+            color: #fbbf24;
+            opacity: 0.8;
+        }
+
+        .day-number {
+            color: #fff;
+            font-weight: bold;
+            margin-bottom: 5px;
+            font-size: 0.9em;
+        }
+
+        .substance-icons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 3px;
+            justify-content: center;
+            flex: 1;
+        }
+
+        .substance-badge {
+            padding: 3px 6px;
+            border-radius: 5px;
+            font-size: 0.75em;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 3px;
+        }
+
+        .substance-badge.alcohol {
+            background: rgba(251, 146, 60, 0.9);
+            color: #fff;
+        }
+
+        .substance-badge.weed {
+            background: rgba(34, 197, 94, 0.9);
+            color: #fff;
+        }
+
+        .substance-badge.nicotine {
+            background: rgba(156, 163, 175, 0.9);
+            color: #fff;
+        }
+
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            animation: fadeIn 0.3s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .modal-content {
+            background: linear-gradient(135deg, rgba(30, 60, 114, 0.95) 0%, rgba(42, 82, 152, 0.95) 100%);
+            backdrop-filter: blur(20px);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 20px;
+            padding: 30px;
+            max-width: 500px;
+            width: 90%;
+            animation: slideIn 0.4s;
+        }
+
+        @keyframes slideIn {
+            from { 
+                transform: scale(0.8) translateY(-50px);
+                opacity: 0;
+            }
+            to { 
+                transform: scale(1) translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .modal-content h2 {
+            color: #fff;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .modal-content p {
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 20px;
+            text-align: center;
+            font-size: 1.1em;
+        }
+
+        .substance-input {
+            margin-bottom: 15px;
+        }
+
+        .substance-input label {
+            display: block;
+            color: #fff;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+
+        .substance-input input {
+            width: 100%;
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+            font-size: 1em;
+        }
+
+        .substance-input input::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .modal-buttons button {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+            color: #fff;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(59, 130, 246, 0.4);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.2);
+            color: #fff;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+            color: #fff;
+        }
+
+        .btn-success:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(34, 197, 94, 0.4);
+        }
+
+        .reward-list {
+            display: grid;
+            gap: 10px;
+            margin: 20px 0;
+        }
+
+        .reward-option {
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+            color: #fff;
+            font-size: 1.1em;
+        }
+
+        .reward-option:hover {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: #4ade80;
+            transform: scale(1.02);
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 1.8em;
+            }
+
+            .calendar-grid {
+                gap: 5px;
+            }
+
+            .day-cell {
+                padding: 5px;
+            }
+
+            .stats-section {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>💪 Substance Tracker</h1>
+        <p class="subtitle">Track your progress, build clean streaks!</p>
+
+        <div class="stats-section" id="statsSection"></div>
+
+        <div class="calendar-section">
+            <div class="calendar-header">
+                <h2 id="currentMonth"></h2>
+                <div class="month-nav">
+                    <button onclick="changeMonth(-1)">← Prev</button>
+                    <button onclick="changeMonth(0)">Today</button>
+                    <button onclick="changeMonth(1)">Next →</button>
+                </div>
+            </div>
+            <div class="calendar-grid" id="calendar"></div>
+        </div>
+    </div>
+
+    <script>
+        let data = {};
+        let currentDate = new Date();
+        let viewDate = new Date();
+
+        const rewards = [
+            "🍫 Some sugar/chocolate",
+            "☕ A nice coffee or tea",
+            "🚿 A relaxing shower",
+            "🎮 30 minutes of gaming",
+            "📺 Watch your favorite show",
+            "🍕 Order your favorite food",
+            "🎵 Listen to your favorite music",
+            "🛌 Take a power nap"
+        ];
+
+        const milestoneRewards = [
+            "🍽️ Go to a nice restaurant",
+            "🎬 See a movie at the cinema",
+            "🛍️ Buy something you've wanted",
+            "🎪 Try a new activity or experience",
+            "🎁 Treat yourself to something special",
+            "🏨 Book a weekend getaway",
+            "💆 Get a spa treatment or massage",
+            "🎯 Buy a new hobby item or equipment"
+        ];
+
+        function loadData() {
+            const saved = localStorage.getItem('substanceTracker');
+            if (saved) {
+                data = JSON.parse(saved);
+            }
+        }
+
+        function saveData() {
+            localStorage.setItem('substanceTracker', JSON.stringify(data));
+        }
+
+        function getDateKey(date) {
+            return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
+        }
+
+        function getDayData(dateKey) {
+            return data[dateKey] || { alcohol: 0, weed: 0, nicotine: 0 };
+        }
+
+        function calculateStreak(substanceCheck) {
+            let streak = 0;
+            let checkDate = new Date();
+            checkDate.setHours(0, 0, 0, 0);
+            
+            // Start from yesterday (don't count today)
+            checkDate.setDate(checkDate.getDate() - 1);
+            
+            // Limit to 365 days max to prevent infinite loops
+            for (let i = 0; i < 365; i++) {
+                const key = getDateKey(checkDate);
+                
+                // If we don't have data for this day, stop
+                if (!data[key]) {
+                    break;
+                }
+                
+                const dayData = getDayData(key);
+                
+                if (substanceCheck(dayData)) {
+                    streak++;
+                } else {
+                    break;
+                }
+                
+                checkDate.setDate(checkDate.getDate() - 1);
+            }
+            
+            return streak;
+        }
+
+        function updateStats() {
+            const alcoholStreak = calculateStreak(d => d.alcohol === 0);
+            const weedStreak = calculateStreak(d => d.weed === 0);
+            const nicotineStreak = calculateStreak(d => d.nicotine === 0);
+            const cleanStreak = calculateStreak(d => d.alcohol === 0 && d.weed === 0 && d.nicotine === 0);
+
+            const statsHTML = `
+                <div class="stat-card">
+                    <div class="stat-icon">🍺</div>
+                    <div class="stat-label">Alcohol Free</div>
+                    <div class="stat-value">${alcoholStreak}</div>
+                    <div class="stat-streak">days</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">🌿</div>
+                    <div class="stat-label">Weed Free</div>
+                    <div class="stat-value">${weedStreak}</div>
+                    <div class="stat-streak">days</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">🚬</div>
+                    <div class="stat-label">Nicotine Free</div>
+                    <div class="stat-value">${nicotineStreak}</div>
+                    <div class="stat-streak">days</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">✨</div>
+                    <div class="stat-label">Fully Clean</div>
+                    <div class="stat-value">${cleanStreak}</div>
+                    <div class="stat-streak">days</div>
+                </div>
+            `;
+            
+            document.getElementById('statsSection').innerHTML = statsHTML;
+        }
+
+        function renderCalendar() {
+            const year = viewDate.getFullYear();
+            const month = viewDate.getMonth();
+            
+            document.getElementById('currentMonth').textContent = 
+                viewDate.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+            
+            const firstDay = new Date(year, month, 1);
+            const lastDay = new Date(year, month + 1, 0);
+            const startDay = firstDay.getDay();
+            const daysInMonth = lastDay.getDate();
+            
+            let html = '';
+            const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+            dayNames.forEach(day => {
+                html += `<div class="day-header">${day}</div>`;
+            });
+            
+            // Previous month days
+            const prevMonthDays = new Date(year, month, 0).getDate();
+            for (let i = startDay - 1; i >= 0; i--) {
+                const day = prevMonthDays - i;
+                const date = new Date(year, month - 1, day);
+                html += renderDayCell(date, true);
+            }
+            
+            // Current month days
+            for (let day = 1; day <= daysInMonth; day++) {
+                const date = new Date(year, month, day);
+                html += renderDayCell(date, false);
+            }
+            
+            // Next month days
+            const remainingCells = 42 - (startDay + daysInMonth);
+            for (let day = 1; day <= remainingCells; day++) {
+                const date = new Date(year, month + 1, day);
+                html += renderDayCell(date, true);
+            }
+            
+            document.getElementById('calendar').innerHTML = html;
+            updateStats();
+        }
+
+        function renderDayCell(date, otherMonth) {
+            const dateKey = getDateKey(date);
+            const dayData = getDayData(dateKey);
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+            const cellDate = new Date(date);
+            cellDate.setHours(0, 0, 0, 0);
+            
+            const isToday = cellDate.getTime() === today.getTime();
+            const isPast = cellDate < today;
+            const isClean = dayData.alcohol === 0 && dayData.weed === 0 && dayData.nicotine === 0 && data[dateKey];
+            const isUntracked = isPast && !data[dateKey];
+            
+            let badges = '';
+            if (dayData.alcohol > 0) badges += `<span class="substance-badge alcohol">🍺 ${dayData.alcohol}</span>`;
+            if (dayData.weed > 0) badges += `<span class="substance-badge weed">🌿 ${dayData.weed}</span>`;
+            if (dayData.nicotine > 0) badges += `<span class="substance-badge nicotine">🚬 ${dayData.nicotine}</span>`;
+            
+            return `
+                <div class="day-cell ${otherMonth ? 'other-month' : ''} ${isToday ? 'today' : ''} ${isClean ? 'clean-day' : ''} ${isUntracked ? 'untracked' : ''}" 
+                     onclick="openDayModal('${dateKey}')">
+                    <div class="day-number">${date.getDate()}</div>
+                    ${isUntracked ? '<div class="question-mark">?</div>' : ''}
+                    <div class="substance-icons">${badges}</div>
+                </div>
+            `;
+        }
+
+        function changeMonth(delta) {
+            if (delta === 0) {
+                viewDate = new Date();
+            } else {
+                viewDate.setMonth(viewDate.getMonth() + delta);
+            }
+            renderCalendar();
+        }
+
+        function openDayModal(dateKey) {
+            const dayData = getDayData(dateKey);
+            const date = new Date(dateKey + 'T00:00:00');
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+            
+            // Check if it's a future date (after today)
+            if (date > today) {
+                return;
+            }
+            
+            // Show edit modal for any day (past or present, including today)
+            showEditModal(dateKey, dayData);
+        }
+
+        function showCleanDayCheck(dateKey) {
+            const modal = document.createElement('div');
+            modal.className = 'modal-overlay';
+            modal.innerHTML = `
+                <div class="modal-content">
+                    <h2>✨ Clean Day Check</h2>
+                    <p>Did you not consume any substances today?</p>
+                    <div class="modal-buttons">
+                        <button class="btn-success" onclick="markCleanDay('${dateKey}')">I didn't! 🎉</button>
+                        <button class="btn-secondary" onclick="closeModal(); showEditModal('${dateKey}', ${JSON.stringify(getDayData(dateKey))})">I did</button>
+                    </div>
+                    <button class="btn-secondary" onclick="closeModal()" style="width: 100%; margin-top: 10px;">Cancel</button>
+                </div>
+            `;
+            document.body.appendChild(modal);
+        }
+
+        function markCleanDay(dateKey) {
+            data[dateKey] = { alcohol: 0, weed: 0, nicotine: 0 };
+            saveData();
+            closeModal();
+            showRewardModal();
+            renderCalendar();
+        }
+
+        function showRewardModal() {
+            const modal = document.createElement('div');
+            modal.className = 'modal-overlay';
+            modal.innerHTML = `
+                <div class="modal-content">
+                    <h2>🎉 Congratulations!</h2>
+                    <p>You stayed clean today! Reward yourself:</p>
+                    <div class="reward-list">
+                        ${rewards.map(reward => `
+                            <div class="reward-option" onclick="closeModal()">
+                                ${reward}
+                            </div>
+                        `).join('')}
+                    </div>
+                    <button class="btn-primary" onclick="closeModal()" style="width: 100%;">Continue</button>
+                </div>
+            `;
+            document.body.appendChild(modal);
+        }
+
+        function showEditModal(dateKey, dayData) {
+            const date = new Date(dateKey);
+            const modal = document.createElement('div');
+            modal.className = 'modal-overlay';
+            modal.innerHTML = `
+                <div class="modal-content">
+                    <h2>📅 ${date.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</h2>
+                    <p>Track your consumption:</p>
+                    
+                    <div class="substance-input">
+                        <label>🍺 Alcohol (servings)</label>
+                        <input type="number" id="alcoholInput" value="${dayData.alcohol}" min="0" placeholder="Number of servings">
+                    </div>
+                    
+                    <div class="substance-input">
+                        <label>🌿 Weed (servings)</label>
+                        <input type="number" id="weedInput" value="${dayData.weed}" min="0" placeholder="Number of servings">
+                    </div>
+                    
+                    <div class="substance-input">
+                        <label>🚬 Nicotine (servings)</label>
+                        <input type="number" id="nicotineInput" value="${dayData.nicotine}" min="0" placeholder="Number of servings">
+                    </div>
+                    
+                    <div class="modal-buttons">
+                        <button class="btn-primary" onclick="saveDayData('${dateKey}')">Save</button>
+                        <button class="btn-secondary" onclick="closeModal()">Cancel</button>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(modal);
+        }
+
+        function saveDayData(dateKey) {
+            const alcohol = parseInt(document.getElementById('alcoholInput').value) || 0;
+            const weed = parseInt(document.getElementById('weedInput').value) || 0;
+            const nicotine = parseInt(document.getElementById('nicotineInput').value) || 0;
+            
+            const wasNewCleanDay = !data[dateKey] && alcohol === 0 && weed === 0 && nicotine === 0;
+            const previousCleanStreak = calculateStreak(d => d.alcohol === 0 && d.weed === 0 && d.nicotine === 0);
+            
+            data[dateKey] = { alcohol, weed, nicotine };
+            saveData();
+            closeModal();
+            
+            // Check if this was a clean day entry
+            if (wasNewCleanDay) {
+                const newCleanStreak = calculateStreak(d => d.alcohol === 0 && d.weed === 0 && d.nicotine === 0);
+                checkMilestone(newCleanStreak, previousCleanStreak);
+                showRewardModal();
+            }
+            
+            renderCalendar();
+        }
+
+        function checkMilestone(newStreak, oldStreak) {
+            const milestones = [7, 14, 21, 30, 60, 90, 120, 180, 365];
+            
+            for (const milestone of milestones) {
+                if (newStreak >= milestone && oldStreak < milestone) {
+                    showMilestoneModal(milestone);
+                    break;
+                }
+            }
+        }
+
+        function showMilestoneModal(days) {
+            const modal = document.createElement('div');
+            modal.className = 'modal-overlay';
+            
+            let milestoneText = '';
+            if (days === 7) milestoneText = '1 WEEK';
+            else if (days === 14) milestoneText = '2 WEEKS';
+            else if (days === 21) milestoneText = '3 WEEKS';
+            else if (days === 30) milestoneText = '1 MONTH';
+            else if (days === 60) milestoneText = '2 MONTHS';
+            else if (days === 90) milestoneText = '3 MONTHS';
+            else if (days === 120) milestoneText = '4 MONTHS';
+            else if (days === 180) milestoneText = '6 MONTHS';
+            else if (days === 365) milestoneText = '1 YEAR';
+            
+            modal.innerHTML = `
+                <div class="modal-content">
+                    <h2>🏆 MAJOR MILESTONE! 🏆</h2>
+                    <p style="font-size: 2em; color: #ffd700; margin: 20px 0;">${milestoneText} CLEAN!</p>
+                    <p style="font-size: 1.3em; margin-bottom: 25px;">This is HUGE! Time to celebrate with something special:</p>
+                    <div class="reward-list">
+                        ${milestoneRewards.map(reward => `
+                            <div class="reward-option" onclick="closeModal()">
+                                ${reward}
+                            </div>
+                        `).join('')}
+                    </div>
+                    <p style="font-size: 0.95em; opacity: 0.8; margin-top: 15px;">You've earned it - invest in yourself!</p>
+                    <button class="btn-primary" onclick="closeModal()" style="width: 100%; margin-top: 15px;">Continue</button>
+                </div>
+            `;
+            document.body.appendChild(modal);
+        }
+
+        function closeModal() {
+            const modal = document.querySelector('.modal-overlay');
+            if (modal) {
+                modal.remove();
+            }
+        }
+
+        // Initialize
+        loadData();
+        renderCalendar();
+    </script>
+</body>
+</html>
