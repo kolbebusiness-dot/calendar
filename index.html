@@ -36,7 +36,32 @@
             text-align: center;
             color: rgba(255, 255, 255, 0.9);
             font-size: 1.1em;
-            margin-bottom: 30px;
+            margin-bottom: 15px;
+        }
+
+        .milestone-section {
+            display: flex;
+            justify-content: center;
+            gap: 6px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+
+        .milestone-badge {
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 8px;
+            padding: 4px 8px;
+            font-size: 0.7em;
+            color: rgba(255, 255, 255, 0.7);
+            transition: all 0.3s;
+        }
+
+        .milestone-badge.achieved {
+            border-color: #22c55e;
+            color: #22c55e;
+            background: rgba(34, 197, 94, 0.15);
+            box-shadow: 0 0 10px rgba(34, 197, 94, 0.3);
         }
 
         .stats-section {
@@ -359,6 +384,25 @@
             box-shadow: 0 5px 15px rgba(245, 158, 11, 0.4);
         }
 
+        .btn-continue {
+            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+            color: #fff;
+            padding: 15px 40px;
+            font-size: 1.2em;
+            border-radius: 12px;
+            box-shadow: 0 8px 20px rgba(59, 130, 246, 0.4);
+            display: block;
+            margin: 20px auto 0;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-continue:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(59, 130, 246, 0.6);
+        }
+
         .reward-list {
             display: grid;
             gap: 10px;
@@ -455,6 +499,8 @@
     <div class="container">
         <h1>💪 Substance Tracker</h1>
         <p class="subtitle">Track your progress, build clean streaks!</p>
+
+        <div class="milestone-section" id="milestoneSection"></div>
 
         <div class="stats-section" id="statsSection"></div>
 
@@ -554,6 +600,18 @@
             const nicotineStreak = calculateStreak(d => d.nicotine === 0);
             const cleanStreak = calculateStreak(d => d.alcohol === 0 && d.weed === 0 && d.nicotine === 0);
 
+            // Update milestone badges
+            const milestones = [7, 14, 21, 30, 60, 90, 120, 180];
+            const milestoneLabels = ['7d', '14d', '21d', '1m', '2m', '3m', '4m', '6m'];
+            
+            const milestonesHTML = milestones.map((milestone, index) => {
+                const achieved = cleanStreak >= milestone;
+                return `<div class="milestone-badge ${achieved ? 'achieved' : ''}">${milestoneLabels[index]}</div>`;
+            }).join('');
+            
+            document.getElementById('milestoneSection').innerHTML = milestonesHTML;
+
+            // Update substance streaks
             const statsHTML = `
                 <div class="stat-card">
                     <div class="stat-icon">🍺</div>
@@ -715,7 +773,7 @@
                 <div class="modal-content">
                     <h2>🎉 Congratulations!</h2>
                     <p style="font-size: 1.2em; margin: 25px 0;">You stayed clean today! Treat yourself to something nice like some chocolate, a coffee, or a relaxing shower.</p>
-                    <button class="btn-primary" onclick="closeModal()" style="width: 100%;">Continue</button>
+                    <button class="btn-continue" onclick="closeModal()">Continue</button>
                 </div>
             `;
             document.body.appendChild(modal);
@@ -746,7 +804,7 @@
                     </div>
                     
                     <div class="modal-buttons three-buttons">
-                        <button class="btn-reset" onclick="resetDayData('${dateKey}')">Reset to 0</button>
+                        <button class="btn-reset" onclick="resetDayData('${dateKey}')">Reset</button>
                         <button class="btn-primary" onclick="saveDayData('${dateKey}')">Save</button>
                         <button class="btn-secondary" onclick="closeModal()">Cancel</button>
                     </div>
@@ -756,9 +814,11 @@
         }
 
         function resetDayData(dateKey) {
-            document.getElementById('alcoholInput').value = '0';
-            document.getElementById('weedInput').value = '0';
-            document.getElementById('nicotineInput').value = '0';
+            // Delete the data for this day
+            delete data[dateKey];
+            saveData();
+            closeModal();
+            renderCalendar();
         }
 
         function saveDayData(dateKey) {
@@ -795,7 +855,7 @@
         }
 
         function checkMilestone(newStreak, oldStreak) {
-            const milestones = [7, 14, 21, 30, 60, 90, 120, 180, 365];
+            const milestones = [7, 14, 21, 30, 60, 90, 120, 180];
             
             for (const milestone of milestones) {
                 if (newStreak >= milestone && oldStreak < milestone) {
@@ -822,22 +882,13 @@
             else if (days === 90) milestoneText = '3 MONTHS';
             else if (days === 120) milestoneText = '4 MONTHS';
             else if (days === 180) milestoneText = '6 MONTHS';
-            else if (days === 365) milestoneText = '1 YEAR';
             
             modal.innerHTML = `
                 <div class="modal-content">
                     <h2>🏆 MAJOR MILESTONE! 🏆</h2>
                     <p style="font-size: 2em; color: #ffd700; margin: 20px 0;">${milestoneText} CLEAN!</p>
-                    <p style="font-size: 1.3em; margin-bottom: 25px;">This is HUGE! Time to celebrate with something special:</p>
-                    <div class="reward-list">
-                        ${milestoneRewards.map(reward => `
-                            <div class="reward-option" onclick="closeModal()">
-                                ${reward}
-                            </div>
-                        `).join('')}
-                    </div>
-                    <p style="font-size: 0.95em; opacity: 0.8; margin-top: 15px;">You've earned it - invest in yourself!</p>
-                    <button class="btn-primary" onclick="closeModal()" style="width: 100%; margin-top: 15px;">Continue</button>
+                    <p style="font-size: 1.3em; margin-bottom: 25px;">This is HUGE! Time to celebrate with something special like going to a nice restaurant or seeing a movie at the cinema.</p>
+                    <button class="btn-continue" onclick="closeModal()">Continue</button>
                 </div>
             `;
             document.body.appendChild(modal);
