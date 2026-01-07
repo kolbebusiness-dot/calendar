@@ -137,7 +137,7 @@
         }
 
         .day-cell {
-            aspect-ratio: 1;
+            aspect-ratio: 0.85;
             background: rgba(255, 255, 255, 0.1);
             border-radius: 8px;
             padding: 4px;
@@ -147,7 +147,7 @@
             display: flex;
             flex-direction: column;
             position: relative;
-            min-height: 50px;
+            min-height: 60px;
         }
 
         .day-cell:hover {
@@ -424,7 +424,7 @@
             .day-cell {
                 padding: 3px;
                 min-width: 0;
-                min-height: 45px;
+                min-height: 55px;
             }
 
             .day-number {
@@ -602,10 +602,10 @@
                 html += `<div class="day-header">${day}</div>`;
             });
             
-            // Previous month days
-            const prevMonthDays = new Date(year, month, 0).getDate();
-            for (let i = startDay - 1; i >= 0; i--) {
-                const day = prevMonthDays - i;
+            // Only show minimal previous month days (just enough to fill the first week)
+            for (let i = 0; i < startDay; i++) {
+                const prevMonthDays = new Date(year, month, 0).getDate();
+                const day = prevMonthDays - startDay + i + 1;
                 const date = new Date(year, month - 1, day);
                 html += renderDayCell(date, true);
             }
@@ -616,9 +616,13 @@
                 html += renderDayCell(date, false);
             }
             
-            // Next month days
-            const remainingCells = 42 - (startDay + daysInMonth);
-            for (let day = 1; day <= remainingCells; day++) {
+            // Calculate how many cells we need to fill to complete 5 rows (35 total cells)
+            const totalCellsUsed = startDay + daysInMonth;
+            const targetCells = 35; // 5 rows × 7 days
+            const nextMonthDaysNeeded = targetCells - totalCellsUsed;
+            
+            // Next month days (only if needed to complete 5 rows)
+            for (let day = 1; day <= nextMonthDaysNeeded; day++) {
                 const date = new Date(year, month + 1, day);
                 html += renderDayCell(date, true);
             }
@@ -710,14 +714,7 @@
             modal.innerHTML = `
                 <div class="modal-content">
                     <h2>🎉 Congratulations!</h2>
-                    <p>You stayed clean today! Reward yourself:</p>
-                    <div class="reward-list">
-                        ${rewards.map(reward => `
-                            <div class="reward-option" onclick="closeModal()">
-                                ${reward}
-                            </div>
-                        `).join('')}
-                    </div>
+                    <p style="font-size: 1.2em; margin: 25px 0;">You stayed clean today! Treat yourself to something nice like some chocolate, a coffee, or a relaxing shower.</p>
                     <button class="btn-primary" onclick="closeModal()" style="width: 100%;">Continue</button>
                 </div>
             `;
@@ -785,11 +782,14 @@
             if (wasNewEntry && isCleanEntry) {
                 // Small delay to let calendar render
                 setTimeout(() => {
-                    showRewardModal();
-                    
                     // Calculate new streak and check for milestone
                     const newCleanStreak = calculateStreak(d => d.alcohol === 0 && d.weed === 0 && d.nicotine === 0);
-                    checkMilestone(newCleanStreak, previousCleanStreak);
+                    const hitMilestone = checkMilestone(newCleanStreak, previousCleanStreak);
+                    
+                    // Only show regular reward if no milestone
+                    if (!hitMilestone) {
+                        showRewardModal();
+                    }
                 }, 100);
             }
         }
@@ -802,10 +802,11 @@
                     // Delay milestone modal so it shows after the reward modal
                     setTimeout(() => {
                         showMilestoneModal(milestone);
-                    }, 500);
-                    break;
+                    }, 100);
+                    return true; // Return true if milestone hit
                 }
             }
+            return false; // No milestone hit
         }
 
         function showMilestoneModal(days) {
