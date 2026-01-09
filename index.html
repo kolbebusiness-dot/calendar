@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Task Reward System - Space Edition</title>
+    <title>Substance Tracker</title>
+    <link rel="apple-touch-icon" href="icon.jpg">
     <style>
         * {
             margin: 0;
@@ -13,46 +14,14 @@
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #0a0e27 0%, #1a1247 50%, #2d1b69 100%);
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 50%, #7e8ba3 100%);
             min-height: 100vh;
             padding: 20px;
-            position: relative;
-            overflow-x: hidden;
-        }
-
-        body::before {
-            content: '';
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-image: 
-                radial-gradient(2px 2px at 20% 30%, white, transparent),
-                radial-gradient(2px 2px at 60% 70%, white, transparent),
-                radial-gradient(1px 1px at 50% 50%, white, transparent),
-                radial-gradient(1px 1px at 80% 10%, white, transparent),
-                radial-gradient(2px 2px at 90% 60%, white, transparent),
-                radial-gradient(1px 1px at 33% 80%, white, transparent),
-                radial-gradient(1px 1px at 15% 85%, white, transparent);
-            background-size: 200% 200%;
-            background-position: 0% 0%;
-            animation: stars 200s linear infinite;
-            pointer-events: none;
-            opacity: 0.8;
-            z-index: 0;
-        }
-
-        @keyframes stars {
-            from { background-position: 0% 0%; }
-            to { background-position: 100% 100%; }
         }
 
         .container {
-            max-width: 1200px;
+            max-width: 1000px;
             margin: 0 auto;
-            position: relative;
-            z-index: 1;
         }
 
         h1 {
@@ -60,412 +29,227 @@
             color: #fff;
             font-size: 2.5em;
             margin-bottom: 10px;
-            text-shadow: 0 0 20px #00d4ff, 0 0 40px #00d4ff;
-            letter-spacing: 2px;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
         }
 
         .subtitle {
             text-align: center;
-            color: #00d4ff;
+            color: rgba(255, 255, 255, 0.9);
             font-size: 1.1em;
-            margin-bottom: 30px;
-            opacity: 0.9;
-        }
-
-        .add-project-section {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            border: 2px solid rgba(0, 212, 255, 0.3);
-            border-radius: 15px;
-            padding: 25px;
-            margin-bottom: 30px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-        }
-
-        .input-group {
             margin-bottom: 15px;
         }
 
-        label {
-            display: block;
-            color: #00d4ff;
-            margin-bottom: 5px;
-            font-weight: bold;
-            font-size: 0.95em;
-        }
-
-        input[type="text"] {
-            width: 100%;
-            padding: 12px;
-            background: rgba(255, 255, 255, 0.15);
-            border: 1px solid rgba(0, 212, 255, 0.4);
-            border-radius: 8px;
-            color: #fff;
-            font-size: 1em;
-            transition: all 0.3s;
-        }
-
-        input[type="text"]:focus {
-            outline: none;
-            border-color: #00d4ff;
-            box-shadow: 0 0 15px rgba(0, 212, 255, 0.5);
-            background: rgba(255, 255, 255, 0.2);
-        }
-
-        input[type="text"]::placeholder {
-            color: rgba(255, 255, 255, 0.5);
-        }
-
-        button {
-            padding: 12px 30px;
-            background: linear-gradient(135deg, #00d4ff 0%, #0066ff 100%);
-            color: white;
-            border: none;
-            border-radius: 8px;
-            font-size: 1em;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.3s;
-            box-shadow: 0 4px 15px rgba(0, 100, 255, 0.4);
-        }
-
-        button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(0, 212, 255, 0.6);
-        }
-
-        button:active {
-            transform: translateY(0);
-        }
-
-        .project-card {
-            background: linear-gradient(135deg, rgba(42, 21, 105, 0.6) 0%, rgba(21, 10, 52, 0.6) 100%);
-            backdrop-filter: blur(10px);
-            border: 2px solid rgba(0, 212, 255, 0.3);
-            border-radius: 15px;
-            padding: 25px;
-            margin-bottom: 25px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
-            transition: all 0.3s;
-        }
-
-        .project-card:hover {
-            border-color: rgba(0, 212, 255, 0.6);
-            box-shadow: 0 12px 40px rgba(0, 212, 255, 0.3);
-        }
-
-        .project-card.completed {
-            background: linear-gradient(135deg, rgba(0, 212, 127, 0.3) 0%, rgba(0, 100, 60, 0.3) 100%);
-            border-color: rgba(0, 255, 127, 0.5);
-        }
-
-        .project-header {
+        .milestone-section {
             display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            margin-bottom: 20px;
-            position: relative;
+            justify-content: center;
+            gap: 6px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
         }
 
-        .project-title-section {
-            flex: 1;
+        .milestone-badge {
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 8px;
+            padding: 4px 8px;
+            font-size: 0.7em;
+            color: rgba(255, 255, 255, 0.7);
+            transition: all 0.3s;
+        }
+
+        .milestone-badge.achieved {
+            border-color: #22c55e;
+            color: #22c55e;
+            background: rgba(34, 197, 94, 0.15);
+            box-shadow: 0 0 10px rgba(34, 197, 94, 0.3);
+        }
+
+        .stats-section {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            border-radius: 10px;
+            padding: 8px 4px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            text-align: center;
+        }
+
+        .stat-icon {
+            font-size: 1.2em;
+            margin-bottom: 3px;
+        }
+
+        .stat-label {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 0.6em;
+            margin-bottom: 2px;
+            line-height: 1.1;
+        }
+
+        .stat-value {
+            color: #fff;
+            font-size: 1.3em;
+            font-weight: bold;
+            text-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        .stat-streak {
+            color: #4ade80;
+            font-size: 0.65em;
+            margin-top: 1px;
+        }
+
+        .calendar-section {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 15px;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            margin-bottom: 20px;
+        }
+
+        .calendar-header {
             display: flex;
             flex-direction: column;
+            align-items: center;
+            margin-bottom: 15px;
             gap: 10px;
-            margin-right: 15px;
         }
 
-        .project-menu-container {
-            position: absolute;
-            top: 0;
-            right: 0;
+        .calendar-header h2 {
+            color: #fff;
+            font-size: 1.3em;
         }
 
-        .project-menu-btn {
-            padding: 8px 12px;
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(0, 212, 255, 0.3);
-            font-size: 1.4em;
-            cursor: pointer;
+        .month-nav {
+            display: flex;
+            gap: 8px;
+        }
+
+        .month-nav button {
+            padding: 6px 12px;
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
             border-radius: 8px;
             color: #fff;
+            cursor: pointer;
+            font-size: 0.85em;
             transition: all 0.3s;
         }
 
-        .project-menu-btn:hover {
-            background: rgba(255, 255, 255, 0.2);
+        .month-nav button:hover {
+            background: rgba(255, 255, 255, 0.3);
         }
 
-        .project-menu {
-            position: absolute;
-            right: 0;
-            top: 45px;
-            background: rgba(30, 20, 60, 0.95);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(0, 212, 255, 0.5);
-            border-radius: 8px;
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 5px;
+        }
+
+        .day-header {
+            text-align: center;
+            color: rgba(255, 255, 255, 0.7);
+            font-weight: bold;
             padding: 5px;
-            min-width: 150px;
-            z-index: 1000;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+            font-size: 0.75em;
         }
 
-        .project-menu button {
-            width: 100%;
-            padding: 10px 15px;
-            background: transparent;
-            border: none;
-            color: #fff;
-            text-align: left;
-            font-size: 0.95em;
-            border-radius: 5px;
-            margin-bottom: 2px;
-            box-shadow: none;
-        }
-
-        .project-menu button:hover {
-            background: rgba(0, 212, 255, 0.2);
-            transform: none;
-        }
-
-        .project-menu button:last-child {
-            color: #ff6b6b;
-            margin-bottom: 0;
-        }
-
-        .project-menu button:last-child:hover {
-            background: rgba(255, 50, 50, 0.2);
-        }
-
-        .project-title {
-            color: #fff;
-            font-size: 1.8em;
-            text-shadow: 0 0 10px rgba(0, 212, 255, 0.5);
-            cursor: pointer;
-            padding: 5px 10px;
-            border-radius: 8px;
-            transition: background 0.2s;
-            display: inline-block;
-        }
-
-        .project-title:hover {
+        .day-cell {
+            aspect-ratio: 0.55;
             background: rgba(255, 255, 255, 0.1);
-        }
-
-        .project-title-input {
-            color: #fff;
-            font-size: 1.8em;
-            background: rgba(255, 255, 255, 0.2);
-            border: 2px solid #00d4ff;
             border-radius: 8px;
-            padding: 5px 10px;
-            font-weight: inherit;
-        }
-
-        .reward-badge {
-            background: linear-gradient(135deg, #ffd700 0%, #ffaa00 100%);
-            color: #1a1247;
-            padding: 8px 20px;
-            border-radius: 20px;
-            font-weight: bold;
-            font-size: 0.95em;
-            box-shadow: 0 4px 15px rgba(255, 215, 0, 0.4);
+            padding: 4px;
             cursor: pointer;
-            transition: background 0.2s;
-        }
-
-        .reward-badge:hover {
-            background: linear-gradient(135deg, #ffe44d 0%, #ffbb33 100%);
-        }
-
-        .reward-badge.earned {
-            background: linear-gradient(135deg, #00ff7f 0%, #00d46a 100%);
-            animation: pulse 2s infinite;
-        }
-
-        .reward-badge.earned:hover {
-            background: linear-gradient(135deg, #33ff99 0%, #00e67a 100%);
-        }
-
-        .reward-input {
-            background: rgba(255, 255, 255, 0.9);
-            color: #1a1247;
-            padding: 8px 20px;
-            border: 2px solid #ffd700;
-            border-radius: 20px;
-            font-weight: bold;
-            font-size: 0.95em;
-        }
-
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-        }
-
-        .progress-section {
-            margin-bottom: 20px;
-        }
-
-        .progress-text {
-            color: #00d4ff;
-            margin-bottom: 8px;
-            font-size: 0.95em;
-        }
-
-        .progress-bar {
-            width: 100%;
-            height: 8px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 10px;
-            overflow: hidden;
-        }
-
-        .progress-fill {
-            height: 100%;
-            background: linear-gradient(90deg, #00d4ff 0%, #0066ff 100%);
-            transition: width 0.3s;
-            box-shadow: 0 0 10px rgba(0, 212, 255, 0.8);
-        }
-
-        .task-input-section {
+            transition: all 0.3s;
+            border: 2px solid transparent;
             display: flex;
-            gap: 10px;
-            margin-bottom: 20px;
+            flex-direction: column;
+            position: relative;
+            min-height: 95px;
         }
 
-        .task-input-section input {
+        .day-cell:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: scale(1.05);
+        }
+
+        .day-cell.today {
+            border-color: #fbbf24;
+            box-shadow: 0 0 15px rgba(251, 191, 36, 0.5);
+        }
+
+        .day-cell.other-month {
+            opacity: 0.3;
+        }
+
+        .day-cell.clean-day {
+            background: linear-gradient(135deg, #4ade80 0%, #22c55e 100%);
+            border-color: #16a34a;
+        }
+
+        .day-cell.untracked {
+            border: 2px dashed rgba(251, 191, 36, 0.6);
+            background: rgba(251, 191, 36, 0.1);
+        }
+
+        .question-mark {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 2em;
+            color: #fbbf24;
+            opacity: 0.8;
+        }
+
+        .day-number {
+            color: #fff;
+            font-weight: bold;
+            margin-bottom: 3px;
+            font-size: 0.75em;
+        }
+
+        .substance-icons {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            justify-content: flex-start;
             flex: 1;
+            align-items: stretch;
         }
 
-        .task-list {
-            list-style: none;
-        }
-
-        .task-item {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(0, 212, 255, 0.2);
-            border-radius: 8px;
-            padding: 15px;
-            margin-bottom: 10px;
+        .substance-badge {
+            padding: 2px 4px;
+            border-radius: 4px;
+            font-size: 0.6em;
+            font-weight: bold;
             display: flex;
             align-items: center;
-            gap: 15px;
-            transition: all 0.3s;
-        }
-
-        .task-item:hover {
-            background: rgba(255, 255, 255, 0.1);
-            border-color: rgba(0, 212, 255, 0.4);
-        }
-
-        .task-item.completed {
-            opacity: 0.6;
-            background: rgba(0, 255, 127, 0.1);
-        }
-
-        .task-checkbox {
-            width: 24px;
-            height: 24px;
-            cursor: pointer;
-            accent-color: #00d4ff;
-        }
-
-        .task-text {
-            flex: 1;
-            color: #fff;
-            font-size: 1.05em;
-            cursor: pointer;
-            padding: 5px;
-            border-radius: 5px;
-            transition: background 0.2s;
-        }
-
-        .task-text:hover {
-            background: rgba(255, 255, 255, 0.1);
-        }
-
-        .task-text-input {
-            flex: 1;
-            padding: 5px;
-            background: rgba(255, 255, 255, 0.2);
-            border: 1px solid #00d4ff;
-            border-radius: 5px;
-            color: #fff;
-            font-size: 1.05em;
-        }
-
-        .task-item.completed .task-text {
-            text-decoration: line-through;
-        }
-
-        .task-menu-btn {
-            padding: 6px 12px;
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(0, 212, 255, 0.3);
-            font-size: 1.2em;
-            position: relative;
-            cursor: pointer;
-        }
-
-        .task-menu-btn:hover {
-            background: rgba(255, 255, 255, 0.2);
-        }
-
-        .task-menu {
-            position: absolute;
-            right: 0;
-            top: 100%;
-            margin-top: 5px;
-            background: rgba(30, 20, 60, 0.95);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(0, 212, 255, 0.5);
-            border-radius: 8px;
-            padding: 5px;
-            min-width: 150px;
-            z-index: 1000;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
-        }
-
-        .task-menu button {
+            justify-content: center;
+            gap: 2px;
             width: 100%;
-            padding: 10px 15px;
-            background: transparent;
-            border: none;
+        }
+
+        .substance-badge.alcohol {
+            background: rgba(251, 146, 60, 0.9);
             color: #fff;
-            text-align: left;
-            font-size: 0.95em;
-            border-radius: 5px;
-            margin-bottom: 2px;
-            box-shadow: none;
         }
 
-        .task-menu button:hover {
-            background: rgba(0, 212, 255, 0.2);
-            transform: none;
+        .substance-badge.weed {
+            background: rgba(34, 197, 94, 0.9);
+            color: #fff;
         }
 
-        .task-menu button:last-child {
-            color: #ff6b6b;
-            margin-bottom: 0;
-        }
-
-        .task-menu button:last-child:hover {
-            background: rgba(255, 50, 50, 0.2);
-        }
-
-        .delete-project-btn {
-            padding: 8px 20px;
-            background: rgba(255, 50, 50, 0.3);
-            border: 1px solid rgba(255, 50, 50, 0.5);
-            margin-top: 15px;
-            display: none;
-        }
-
-        .empty-state {
-            text-align: center;
-            color: rgba(255, 255, 255, 0.5);
-            padding: 40px;
-            font-size: 1.1em;
+        .substance-badge.nicotine {
+            background: rgba(156, 163, 175, 0.9);
+            color: #fff;
         }
 
         .modal-overlay {
@@ -478,7 +262,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            z-index: 2000;
+            z-index: 1000;
             animation: fadeIn 0.3s;
         }
 
@@ -488,14 +272,13 @@
         }
 
         .modal-content {
-            background: linear-gradient(135deg, rgba(42, 21, 105, 0.95) 0%, rgba(21, 10, 52, 0.95) 100%);
+            background: linear-gradient(135deg, rgba(30, 60, 114, 0.95) 0%, rgba(42, 82, 152, 0.95) 100%);
             backdrop-filter: blur(20px);
-            border: 2px solid #00d4ff;
+            border: 2px solid rgba(255, 255, 255, 0.3);
             border-radius: 20px;
-            padding: 40px;
+            padding: 30px;
             max-width: 500px;
-            text-align: center;
-            box-shadow: 0 0 50px rgba(0, 212, 255, 0.5);
+            width: 90%;
             animation: slideIn 0.4s;
         }
 
@@ -511,541 +294,619 @@
         }
 
         .modal-content h2 {
-            color: #00d4ff;
-            font-size: 2.5em;
+            color: #fff;
             margin-bottom: 20px;
-            text-shadow: 0 0 20px rgba(0, 212, 255, 0.8);
+            text-align: center;
         }
 
         .modal-content p {
-            color: #fff;
-            font-size: 1.2em;
-            margin-bottom: 15px;
-            line-height: 1.6;
-        }
-
-        .modal-reward {
-            background: linear-gradient(135deg, #ffd700 0%, #ffaa00 100%);
-            color: #1a1247;
-            padding: 15px 30px;
-            border-radius: 25px;
-            font-size: 1.5em;
-            font-weight: bold;
-            margin: 25px 0;
-            display: inline-block;
-            box-shadow: 0 0 30px rgba(255, 215, 0, 0.6);
-        }
-
-        .modal-content button {
-            padding: 15px 40px;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 20px;
+            text-align: center;
             font-size: 1.1em;
+        }
+
+        .substance-input {
+            margin-bottom: 15px;
+        }
+
+        .substance-input label {
+            display: block;
+            color: #fff;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+
+        .substance-input input {
+            width: 100%;
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+            font-size: 1em;
+        }
+
+        .substance-input input::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 10px;
             margin-top: 20px;
         }
 
-        .project-card.collapsed {
-            padding: 20px 25px;
-            cursor: pointer;
-        }
-
-        .project-card.collapsed:hover {
-            background: linear-gradient(135deg, rgba(0, 212, 127, 0.4) 0%, rgba(0, 100, 60, 0.4) 100%);
-        }
-
-        .project-card.collapsed .project-header {
-            margin-bottom: 0;
-        }
-
-        .project-card.collapsed .progress-section,
-        .project-card.collapsed .task-input-section,
-        .project-card.collapsed .task-list,
-        .project-card.collapsed .delete-project-btn {
-            display: none;
-        }
-
-        .expand-hint {
-            color: rgba(255, 255, 255, 0.6);
-            font-size: 0.9em;
-            margin-top: 10px;
-            font-style: italic;
-        }
-
-        .collapse-hint {
-            color: rgba(255, 255, 255, 0.6);
-            font-size: 0.9em;
-            margin-top: 10px;
-            text-align: center;
-            font-style: italic;
-        }
-
-        .collapse-toggle-btn {
-            width: 100%;
-            padding: 10px;
-            background: rgba(0, 212, 255, 0.2);
-            border: 1px solid rgba(0, 212, 255, 0.4);
+        .modal-buttons button {
+            flex: 1;
+            padding: 12px;
+            border: none;
             border-radius: 8px;
-            color: #00d4ff;
-            font-size: 0.95em;
+            font-size: 1em;
             font-weight: bold;
-            margin-top: 15px;
             cursor: pointer;
             transition: all 0.3s;
         }
 
-        .collapse-toggle-btn:hover {
-            background: rgba(0, 212, 255, 0.3);
-            border-color: rgba(0, 212, 255, 0.6);
+        .btn-primary {
+            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+            color: #fff;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(59, 130, 246, 0.4);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.2);
+            color: #fff;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+            color: #fff;
+        }
+
+        .btn-success:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(34, 197, 94, 0.4);
+        }
+
+        .btn-reset {
+            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+            color: #fff;
+        }
+
+        .btn-reset:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(245, 158, 11, 0.4);
+        }
+
+        .btn-continue {
+            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+            color: #fff;
+            padding: 15px 40px;
+            font-size: 1.2em;
+            border-radius: 12px;
+            box-shadow: 0 8px 20px rgba(59, 130, 246, 0.4);
+            display: block;
+            margin: 20px auto 0;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-continue:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(59, 130, 246, 0.6);
+        }
+
+        .reward-list {
+            display: grid;
+            gap: 10px;
+            margin: 20px 0;
+        }
+
+        .reward-option {
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+            color: #fff;
+            font-size: 1.1em;
+        }
+
+        .reward-option:hover {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: #4ade80;
+            transform: scale(1.02);
         }
 
         @media (max-width: 768px) {
             h1 {
-                font-size: 2em;
-            }
-            
-            .project-header {
-                flex-direction: column;
-                gap: 15px;
-                align-items: flex-start;
+                font-size: 1.8em;
             }
 
-            .task-input-section {
-                flex-direction: column;
+            .stats-section {
+                grid-template-columns: repeat(4, 1fr);
+                gap: 6px;
+            }
+
+            .stat-card {
+                padding: 6px 3px;
+            }
+
+            .stat-icon {
+                font-size: 1em;
+            }
+
+            .stat-label {
+                font-size: 0.55em;
+            }
+
+            .stat-value {
+                font-size: 1.1em;
+            }
+
+            .stat-streak {
+                font-size: 0.6em;
+            }
+
+            .calendar-section {
+                padding: 10px;
+            }
+
+            .calendar-grid {
+                gap: 3px;
+            }
+
+            .day-cell {
+                padding: 3px;
+                min-width: 0;
+                min-height: 90px;
+            }
+
+            .day-number {
+                font-size: 0.7em;
+            }
+
+            .substance-badge {
+                font-size: 0.55em;
+                padding: 1px 3px;
+            }
+
+            .question-mark {
+                font-size: 1.3em;
+            }
+
+            .calendar-header h2 {
+                font-size: 1.1em;
+            }
+
+            .month-nav button {
+                padding: 5px 10px;
+                font-size: 0.8em;
             }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>🚀 TASK REWARD SYSTEM 🌌</h1>
-        <p class="subtitle">Complete missions, unlock rewards across the galaxy</p>
+        <h1>💪 Substance Tracker</h1>
+        <p class="subtitle">Track your progress, build clean streaks!</p>
 
-        <div class="add-project-section">
-            <div class="input-group">
-                <label for="projectName">Mission Name</label>
-                <input type="text" id="projectName" placeholder="e.g., Launch New Website">
+        <div class="milestone-section" id="milestoneSection"></div>
+
+        <div class="stats-section" id="statsSection"></div>
+
+        <div class="calendar-section">
+            <div class="calendar-header">
+                <h2 id="currentMonth"></h2>
+                <div class="month-nav">
+                    <button onclick="changeMonth(-1)">← Prev</button>
+                    <button onclick="changeMonth(0)">Today</button>
+                    <button onclick="changeMonth(1)">Next →</button>
+                </div>
             </div>
-            <div class="input-group">
-                <label for="projectReward">Mission Reward</label>
-                <input type="text" id="projectReward" placeholder="e.g., Weekend Getaway">
-            </div>
-            <button onclick="addProject()">Create Mission</button>
+            <div class="calendar-grid" id="calendar"></div>
         </div>
-
-        <div id="projectsContainer"></div>
     </div>
 
     <script>
-        let projects = [];
-        let openMenuId = null;
-        let openProjectMenuId = null;
+        let data = {};
+        let currentDate = new Date();
+        let viewDate = new Date();
 
-        function loadProjects() {
-            const saved = localStorage.getItem('spaceProjects');
+        const rewards = [
+            "🍫 Some sugar/chocolate",
+            "☕ A nice coffee or tea",
+            "🚿 A relaxing shower",
+            "🎮 30 minutes of gaming",
+            "📺 Watch your favorite show",
+            "🍕 Order your favorite food",
+            "🎵 Listen to your favorite music",
+            "🛌 Take a power nap"
+        ];
+
+        const milestoneRewards = [
+            "🍽️ Go to a nice restaurant",
+            "🎬 See a movie at the cinema",
+            "🛍️ Buy something you've wanted",
+            "🎪 Try a new activity or experience",
+            "🎁 Treat yourself to something special",
+            "🏨 Book a weekend getaway",
+            "💆 Get a spa treatment or massage",
+            "🎯 Buy a new hobby item or equipment"
+        ];
+
+        function loadData() {
+            const saved = localStorage.getItem('substanceTracker');
             if (saved) {
-                projects = JSON.parse(saved);
-                renderProjects();
+                data = JSON.parse(saved);
             }
         }
 
-        function saveProjects() {
-            localStorage.setItem('spaceProjects', JSON.stringify(projects));
+        function saveData() {
+            localStorage.setItem('substanceTracker', JSON.stringify(data));
         }
 
-        function addProject() {
-            const name = document.getElementById('projectName').value.trim();
-            const reward = document.getElementById('projectReward').value.trim();
-
-            if (!name || !reward) {
-                alert('Please enter both mission name and reward!');
-                return;
-            }
-
-            const project = {
-                id: Date.now(),
-                name: name,
-                reward: reward,
-                tasks: [],
-                collapsed: false
-            };
-
-            projects.push(project);
-            saveProjects();
-            renderProjects();
-
-            document.getElementById('projectName').value = '';
-            document.getElementById('projectReward').value = '';
+        function getDateKey(date) {
+            return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
         }
 
-        function addTask(projectId) {
-            const input = document.getElementById(`taskInput-${projectId}`);
-            const taskText = input.value.trim();
-
-            if (!taskText) {
-                alert('Please enter a task!');
-                return;
-            }
-
-            const project = projects.find(p => p.id === projectId);
-            if (project) {
-                project.tasks.push({
-                    id: Date.now(),
-                    text: taskText,
-                    completed: false
-                });
-                saveProjects();
-                renderProjects();
-                input.value = '';
-            }
+        function getDayData(dateKey) {
+            return data[dateKey] || { alcohol: 0, weed: 0, nicotine: 0 };
         }
 
-        function toggleTask(projectId, taskId) {
-            const project = projects.find(p => p.id === projectId);
-            if (project) {
-                const task = project.tasks.find(t => t.id === taskId);
-                if (task) {
-                    const wasCompleted = task.completed;
-                    task.completed = !task.completed;
-                    saveProjects();
-                    renderProjects();
-
-                    // Check if all tasks are now completed
-                    if (!wasCompleted && task.completed) {
-                        const allCompleted = project.tasks.every(t => t.completed);
-                        if (allCompleted && project.tasks.length > 0) {
-                            showCompletionModal(project);
-                        }
-                    }
+        function calculateStreak(substanceCheck) {
+            let streak = 0;
+            let checkDate = new Date();
+            checkDate.setHours(0, 0, 0, 0);
+            
+            // Start from yesterday (don't count today)
+            checkDate.setDate(checkDate.getDate() - 1);
+            
+            // Limit to 365 days max to prevent infinite loops
+            for (let i = 0; i < 365; i++) {
+                const key = getDateKey(checkDate);
+                
+                // If we don't have data for this day, stop
+                if (!data[key]) {
+                    break;
                 }
+                
+                const dayData = getDayData(key);
+                
+                if (substanceCheck(dayData)) {
+                    streak++;
+                } else {
+                    break;
+                }
+                
+                checkDate.setDate(checkDate.getDate() - 1);
             }
+            
+            return streak;
         }
 
-        function showCompletionModal(project) {
+        function updateStats() {
+            const alcoholStreak = calculateStreak(d => d.alcohol === 0);
+            const weedStreak = calculateStreak(d => d.weed === 0);
+            const nicotineStreak = calculateStreak(d => d.nicotine === 0);
+            const cleanStreak = calculateStreak(d => d.alcohol === 0 && d.weed === 0 && d.nicotine === 0);
+
+            // Update milestone badges
+            const milestones = [7, 14, 21, 30, 60, 90, 120, 180];
+            const milestoneLabels = ['7d', '14d', '21d', '1m', '2m', '3m', '4m', '6m'];
+            
+            const milestonesHTML = milestones.map((milestone, index) => {
+                const achieved = cleanStreak >= milestone;
+                return `<div class="milestone-badge ${achieved ? 'achieved' : ''}">${milestoneLabels[index]}</div>`;
+            }).join('');
+            
+            document.getElementById('milestoneSection').innerHTML = milestonesHTML;
+
+            // Update substance streaks
+            const statsHTML = `
+                <div class="stat-card">
+                    <div class="stat-icon">🍺</div>
+                    <div class="stat-label">Alcohol Free</div>
+                    <div class="stat-value">${alcoholStreak}</div>
+                    <div class="stat-streak">days</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">🌿</div>
+                    <div class="stat-label">Weed Free</div>
+                    <div class="stat-value">${weedStreak}</div>
+                    <div class="stat-streak">days</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">🚬</div>
+                    <div class="stat-label">Nicotine Free</div>
+                    <div class="stat-value">${nicotineStreak}</div>
+                    <div class="stat-streak">days</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">✨</div>
+                    <div class="stat-label">Fully Clean</div>
+                    <div class="stat-value">${cleanStreak}</div>
+                    <div class="stat-streak">days</div>
+                </div>
+            `;
+            
+            document.getElementById('statsSection').innerHTML = statsHTML;
+        }
+
+        function renderCalendar() {
+            const year = viewDate.getFullYear();
+            const month = viewDate.getMonth();
+            
+            document.getElementById('currentMonth').textContent = 
+                viewDate.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+            
+            const firstDay = new Date(year, month, 1);
+            const lastDay = new Date(year, month + 1, 0);
+            const startDay = firstDay.getDay();
+            const daysInMonth = lastDay.getDate();
+            
+            let html = '';
+            const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+            dayNames.forEach(day => {
+                html += `<div class="day-header">${day}</div>`;
+            });
+            
+            // Only show minimal previous month days (just enough to fill the first week)
+            for (let i = 0; i < startDay; i++) {
+                const prevMonthDays = new Date(year, month, 0).getDate();
+                const day = prevMonthDays - startDay + i + 1;
+                const date = new Date(year, month - 1, day);
+                html += renderDayCell(date, true);
+            }
+            
+            // Current month days
+            for (let day = 1; day <= daysInMonth; day++) {
+                const date = new Date(year, month, day);
+                html += renderDayCell(date, false);
+            }
+            
+            // Calculate how many cells we need to fill to complete 5 rows (35 total cells)
+            const totalCellsUsed = startDay + daysInMonth;
+            const targetCells = 35; // 5 rows × 7 days
+            const nextMonthDaysNeeded = targetCells - totalCellsUsed;
+            
+            // Next month days (only if needed to complete 5 rows)
+            for (let day = 1; day <= nextMonthDaysNeeded; day++) {
+                const date = new Date(year, month + 1, day);
+                html += renderDayCell(date, true);
+            }
+            
+            document.getElementById('calendar').innerHTML = html;
+            updateStats();
+        }
+
+        function renderDayCell(date, otherMonth) {
+            const dateKey = getDateKey(date);
+            const dayData = getDayData(dateKey);
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+            const cellDate = new Date(date);
+            cellDate.setHours(0, 0, 0, 0);
+            
+            const isToday = cellDate.getTime() === today.getTime();
+            const isPast = cellDate < today;
+            const isClean = dayData.alcohol === 0 && dayData.weed === 0 && dayData.nicotine === 0 && data[dateKey];
+            const isUntracked = isPast && !data[dateKey];
+            
+            let badges = '';
+            if (dayData.alcohol > 0) badges += `<span class="substance-badge alcohol">🍺 ${dayData.alcohol}</span>`;
+            if (dayData.weed > 0) badges += `<span class="substance-badge weed">🌿 ${dayData.weed}</span>`;
+            if (dayData.nicotine > 0) badges += `<span class="substance-badge nicotine">🚬 ${dayData.nicotine}</span>`;
+            
+            return `
+                <div class="day-cell ${otherMonth ? 'other-month' : ''} ${isToday ? 'today' : ''} ${isClean ? 'clean-day' : ''} ${isUntracked ? 'untracked' : ''}" 
+                     onclick="openDayModal('${dateKey}')">
+                    <div class="day-number">${date.getDate()}</div>
+                    ${isUntracked ? '<div class="question-mark">?</div>' : ''}
+                    <div class="substance-icons">${badges}</div>
+                </div>
+            `;
+        }
+
+        function changeMonth(delta) {
+            if (delta === 0) {
+                viewDate = new Date();
+            } else {
+                viewDate.setMonth(viewDate.getMonth() + delta);
+            }
+            renderCalendar();
+        }
+
+        function openDayModal(dateKey) {
+            const dayData = getDayData(dateKey);
+            const date = new Date(dateKey + 'T00:00:00');
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+            
+            // Check if it's a future date (after today)
+            if (date > today) {
+                return;
+            }
+            
+            // Show edit modal for any day (past or present, including today)
+            showEditModal(dateKey, dayData);
+        }
+
+        function showCleanDayCheck(dateKey) {
             const modal = document.createElement('div');
             modal.className = 'modal-overlay';
             modal.innerHTML = `
                 <div class="modal-content">
-                    <h2>🎉 MISSION COMPLETE! 🎉</h2>
-                    <p>Congratulations on completing</p>
-                    <p style="font-size: 1.4em; color: #00d4ff;"><strong>${project.name}</strong></p>
-                    <div class="modal-reward">🎁 ${project.reward}</div>
-                    <p>You've earned your reward!</p>
-                    <button onclick="closeModal()">Continue</button>
+                    <h2>✨ Clean Day Check</h2>
+                    <p>Did you not consume any substances today?</p>
+                    <div class="modal-buttons">
+                        <button class="btn-success" onclick="markCleanDay('${dateKey}')">I didn't! 🎉</button>
+                        <button class="btn-secondary" onclick="closeModal(); showEditModal('${dateKey}', ${JSON.stringify(getDayData(dateKey))})">I did</button>
+                    </div>
+                    <button class="btn-secondary" onclick="closeModal()" style="width: 100%; margin-top: 10px;">Cancel</button>
                 </div>
             `;
             document.body.appendChild(modal);
+        }
 
-            // Set project to collapsed after showing modal
-            setTimeout(() => {
-                const proj = projects.find(p => p.id === project.id);
-                if (proj) {
-                    proj.collapsed = true;
-                    saveProjects();
+        function markCleanDay(dateKey) {
+            data[dateKey] = { alcohol: 0, weed: 0, nicotine: 0 };
+            saveData();
+            closeModal();
+            showRewardModal();
+            renderCalendar();
+        }
+
+        function showRewardModal() {
+            const modal = document.createElement('div');
+            modal.className = 'modal-overlay';
+            modal.innerHTML = `
+                <div class="modal-content">
+                    <h2>🎉 Congratulations!</h2>
+                    <p style="font-size: 1.2em; margin: 25px 0;">You stayed clean today! Treat yourself to something nice like some chocolate, a coffee, or a relaxing shower.</p>
+                    <button class="btn-continue" onclick="closeModal()">Continue</button>
+                </div>
+            `;
+            document.body.appendChild(modal);
+        }
+
+        function showEditModal(dateKey, dayData) {
+            const date = new Date(dateKey + 'T00:00:00');
+            const modal = document.createElement('div');
+            modal.className = 'modal-overlay';
+            modal.innerHTML = `
+                <div class="modal-content">
+                    <h2>📅 ${date.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</h2>
+                    <p>Track your consumption:</p>
+                    
+                    <div class="substance-input">
+                        <label>🍺 Alcohol (servings)</label>
+                        <input type="number" id="alcoholInput" value="${dayData.alcohol}" min="0" placeholder="Number of servings">
+                    </div>
+                    
+                    <div class="substance-input">
+                        <label>🌿 Weed (servings)</label>
+                        <input type="number" id="weedInput" value="${dayData.weed}" min="0" placeholder="Number of servings">
+                    </div>
+                    
+                    <div class="substance-input">
+                        <label>🚬 Nicotine (servings)</label>
+                        <input type="number" id="nicotineInput" value="${dayData.nicotine}" min="0" placeholder="Number of servings">
+                    </div>
+                    
+                    <div class="modal-buttons three-buttons">
+                        <button class="btn-reset" onclick="resetDayData('${dateKey}')">Reset</button>
+                        <button class="btn-primary" onclick="saveDayData('${dateKey}')">Save</button>
+                        <button class="btn-secondary" onclick="closeModal()">Cancel</button>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(modal);
+        }
+
+        function resetDayData(dateKey) {
+            // Delete the data for this day
+            delete data[dateKey];
+            saveData();
+            closeModal();
+            renderCalendar();
+        }
+
+        function saveDayData(dateKey) {
+            const alcohol = parseInt(document.getElementById('alcoholInput').value) || 0;
+            const weed = parseInt(document.getElementById('weedInput').value) || 0;
+            const nicotine = parseInt(document.getElementById('nicotineInput').value) || 0;
+            
+            const wasNewEntry = !data[dateKey];
+            const isCleanEntry = alcohol === 0 && weed === 0 && nicotine === 0;
+            
+            // Get streak BEFORE saving
+            const previousCleanStreak = calculateStreak(d => d.alcohol === 0 && d.weed === 0 && d.nicotine === 0);
+            
+            // Save the data
+            data[dateKey] = { alcohol, weed, nicotine };
+            saveData();
+            closeModal();
+            renderCalendar();
+            
+            // Show celebration if this was a new clean day entry
+            if (wasNewEntry && isCleanEntry) {
+                // Small delay to let calendar render
+                setTimeout(() => {
+                    // Calculate new streak and check for milestone
+                    const newCleanStreak = calculateStreak(d => d.alcohol === 0 && d.weed === 0 && d.nicotine === 0);
+                    const hitMilestone = checkMilestone(newCleanStreak, previousCleanStreak);
+                    
+                    // Only show regular reward if no milestone
+                    if (!hitMilestone) {
+                        showRewardModal();
+                    }
+                }, 100);
+            }
+        }
+
+        function checkMilestone(newStreak, oldStreak) {
+            const milestones = [7, 14, 21, 30, 60, 90, 120, 180];
+            
+            for (const milestone of milestones) {
+                if (newStreak >= milestone && oldStreak < milestone) {
+                    // Delay milestone modal so it shows after the reward modal
+                    setTimeout(() => {
+                        showMilestoneModal(milestone);
+                    }, 100);
+                    return true; // Return true if milestone hit
                 }
-            }, 100);
+            }
+            return false; // No milestone hit
+        }
+
+        function showMilestoneModal(days) {
+            const modal = document.createElement('div');
+            modal.className = 'modal-overlay';
+            
+            let milestoneText = '';
+            if (days === 7) milestoneText = '1 WEEK';
+            else if (days === 14) milestoneText = '2 WEEKS';
+            else if (days === 21) milestoneText = '3 WEEKS';
+            else if (days === 30) milestoneText = '1 MONTH';
+            else if (days === 60) milestoneText = '2 MONTHS';
+            else if (days === 90) milestoneText = '3 MONTHS';
+            else if (days === 120) milestoneText = '4 MONTHS';
+            else if (days === 180) milestoneText = '6 MONTHS';
+            
+            modal.innerHTML = `
+                <div class="modal-content">
+                    <h2>🏆 MAJOR MILESTONE! 🏆</h2>
+                    <p style="font-size: 2em; color: #ffd700; margin: 20px 0;">${milestoneText} CLEAN!</p>
+                    <p style="font-size: 1.3em; margin-bottom: 25px;">This is HUGE! Time to celebrate with something special like going to a nice restaurant or seeing a movie at the cinema.</p>
+                    <button class="btn-continue" onclick="closeModal()">Continue</button>
+                </div>
+            `;
+            document.body.appendChild(modal);
         }
 
         function closeModal() {
             const modal = document.querySelector('.modal-overlay');
             if (modal) {
                 modal.remove();
-                renderProjects();
             }
         }
 
-        function toggleProjectCollapse(projectId, event) {
-            // Don't toggle if clicking on buttons or inputs
-            if (event.target.tagName === 'BUTTON' || 
-                event.target.tagName === 'INPUT' ||
-                event.target.closest('button') ||
-                event.target.closest('.task-menu')) {
-                return;
-            }
-
-            const project = projects.find(p => p.id === projectId);
-            if (project && project.collapsed) {
-                project.collapsed = false;
-                saveProjects();
-                renderProjects();
-            }
-        }
-
-        function editTaskText(projectId, taskId, element) {
-            const project = projects.find(p => p.id === projectId);
-            const task = project.tasks.find(t => t.id === taskId);
-            
-            const input = document.createElement('input');
-            input.type = 'text';
-            input.className = 'task-text-input';
-            input.value = task.text;
-            
-            const parent = element.parentElement;
-            parent.replaceChild(input, element);
-            input.focus();
-            input.select();
-
-            function saveEdit() {
-                const newText = input.value.trim();
-                if (newText) {
-                    task.text = newText;
-                    saveProjects();
-                }
-                renderProjects();
-            }
-
-            input.addEventListener('blur', saveEdit);
-            input.addEventListener('keypress', (e) => {
-                if (e.key === 'Enter') {
-                    saveEdit();
-                }
-            });
-        }
-
-        function editProjectName(projectId, element, event) {
-            event.stopPropagation();
-            const project = projects.find(p => p.id === projectId);
-            
-            const input = document.createElement('input');
-            input.type = 'text';
-            input.className = 'project-title-input';
-            input.value = project.name;
-            
-            element.replaceWith(input);
-            input.focus();
-            input.select();
-
-            function saveEdit() {
-                const newName = input.value.trim();
-                if (newName) {
-                    project.name = newName;
-                    saveProjects();
-                }
-                renderProjects();
-            }
-
-            input.addEventListener('blur', saveEdit);
-            input.addEventListener('click', (e) => e.stopPropagation());
-            input.addEventListener('keypress', (e) => {
-                if (e.key === 'Enter') {
-                    saveEdit();
-                }
-            });
-        }
-
-        function editProjectReward(projectId, element, event) {
-            event.stopPropagation();
-            const project = projects.find(p => p.id === projectId);
-            
-            const input = document.createElement('input');
-            input.type = 'text';
-            input.className = 'reward-input';
-            input.value = project.reward;
-            
-            element.replaceWith(input);
-            input.focus();
-            input.select();
-
-            function saveEdit() {
-                const newReward = input.value.trim();
-                if (newReward) {
-                    project.reward = newReward;
-                    saveProjects();
-                }
-                renderProjects();
-            }
-
-            input.addEventListener('blur', saveEdit);
-            input.addEventListener('click', (e) => e.stopPropagation());
-            input.addEventListener('keypress', (e) => {
-                if (e.key === 'Enter') {
-                    saveEdit();
-                }
-            });
-        }
-
-        function toggleTaskMenu(taskId, event) {
-            event.stopPropagation();
-            
-            // Close existing menu
-            if (openMenuId === taskId) {
-                openMenuId = null;
-                renderProjects();
-                return;
-            }
-
-            openMenuId = taskId;
-            renderProjects();
-        }
-
-        function toggleProjectMenu(projectId, event) {
-            event.stopPropagation();
-            
-            // Close existing menu
-            if (openProjectMenuId === projectId) {
-                openProjectMenuId = null;
-                renderProjects();
-                return;
-            }
-
-            openProjectMenuId = projectId;
-            renderProjects();
-        }
-
-        function moveProjectUp(projectId) {
-            const projectIndex = projects.findIndex(p => p.id === projectId);
-            
-            if (projectIndex > 0) {
-                [projects[projectIndex], projects[projectIndex - 1]] = 
-                [projects[projectIndex - 1], projects[projectIndex]];
-                saveProjects();
-                renderProjects();
-            }
-        }
-
-        function moveProjectDown(projectId) {
-            const projectIndex = projects.findIndex(p => p.id === projectId);
-            
-            if (projectIndex < projects.length - 1) {
-                [projects[projectIndex], projects[projectIndex + 1]] = 
-                [projects[projectIndex + 1], projects[projectIndex]];
-                saveProjects();
-                renderProjects();
-            }
-        }
-
-        function moveTaskUp(projectId, taskId) {
-            const project = projects.find(p => p.id === projectId);
-            const taskIndex = project.tasks.findIndex(t => t.id === taskId);
-            
-            if (taskIndex > 0) {
-                [project.tasks[taskIndex], project.tasks[taskIndex - 1]] = 
-                [project.tasks[taskIndex - 1], project.tasks[taskIndex]];
-                saveProjects();
-                renderProjects();
-            }
-        }
-
-        function moveTaskDown(projectId, taskId) {
-            const project = projects.find(p => p.id === projectId);
-            const taskIndex = project.tasks.findIndex(t => t.id === taskId);
-            
-            if (taskIndex < project.tasks.length - 1) {
-                [project.tasks[taskIndex], project.tasks[taskIndex + 1]] = 
-                [project.tasks[taskIndex + 1], project.tasks[taskIndex]];
-                saveProjects();
-                renderProjects();
-            }
-        }
-
-        function deleteTask(projectId, taskId) {
-            const project = projects.find(p => p.id === projectId);
-            if (project) {
-                project.tasks = project.tasks.filter(t => t.id !== taskId);
-                saveProjects();
-                renderProjects();
-            }
-        }
-
-        function deleteProject(projectId) {
-            if (confirm('Are you sure you want to delete this mission and all its tasks?')) {
-                projects = projects.filter(p => p.id !== projectId);
-                saveProjects();
-                renderProjects();
-            }
-        }
-
-        function renderProjects() {
-            const container = document.getElementById('projectsContainer');
-            
-            if (projects.length === 0) {
-                container.innerHTML = '<div class="empty-state">No missions yet. Create your first mission above! 🌟</div>';
-                return;
-            }
-
-            container.innerHTML = projects.map(project => {
-                const completedTasks = project.tasks.filter(t => t.completed).length;
-                const totalTasks = project.tasks.length;
-                const progress = totalTasks > 0 ? (completedTasks / totalTasks) * 100 : 0;
-                const isCompleted = totalTasks > 0 && completedTasks === totalTasks;
-
-                return `
-                    <div class="project-card ${isCompleted ? 'completed' : ''} ${project.collapsed ? 'collapsed' : ''}" 
-                         onclick="handleProjectClick(${project.id}, event)">
-                        <div class="project-header">
-                            <div class="project-title-section">
-                                <h2 class="project-title" onclick="editProjectName(${project.id}, this, event); event.stopPropagation();">${project.name}</h2>
-                                <div class="reward-badge ${isCompleted ? 'earned' : ''}" onclick="editProjectReward(${project.id}, this, event); event.stopPropagation();">
-                                    ${isCompleted ? '🎉 ' : '🎁 '}${project.reward}
-                                </div>
-                            </div>
-                            <div class="project-menu-container">
-                                <button class="project-menu-btn" onclick="toggleProjectMenu(${project.id}, event)">⋮</button>
-                                ${openProjectMenuId === project.id ? `
-                                    <div class="project-menu">
-                                        <button onclick="moveProjectUp(${project.id}); event.stopPropagation();">↑ Move Up</button>
-                                        <button onclick="moveProjectDown(${project.id}); event.stopPropagation();">↓ Move Down</button>
-                                        <button onclick="deleteProject(${project.id}); event.stopPropagation();">🗑️ Delete</button>
-                                    </div>
-                                ` : ''}
-                            </div>
-                        </div>
-
-                        <div class="progress-section">
-                            <div class="progress-text">
-                                Mission Progress: ${completedTasks} / ${totalTasks} tasks completed
-                            </div>
-                            <div class="progress-bar">
-                                <div class="progress-fill" style="width: ${progress}%"></div>
-                            </div>
-                        </div>
-
-                        <div class="task-input-section">
-                            <input type="text" id="taskInput-${project.id}" placeholder="Add a new task..." 
-                                   onkeypress="if(event.key === 'Enter') addTask(${project.id})" onclick="event.stopPropagation()">
-                            <button onclick="addTask(${project.id}); event.stopPropagation()">Add Task</button>
-                        </div>
-
-                        <ul class="task-list">
-                            ${project.tasks.map(task => `
-                                <li class="task-item ${task.completed ? 'completed' : ''}">
-                                    <input type="checkbox" class="task-checkbox" 
-                                           ${task.completed ? 'checked' : ''} 
-                                           onchange="toggleTask(${project.id}, ${task.id}); event.stopPropagation();">
-                                    <span class="task-text" onclick="editTaskText(${project.id}, ${task.id}, this); event.stopPropagation();">${task.text}</span>
-                                    <div style="position: relative;">
-                                        <button class="task-menu-btn" onclick="toggleTaskMenu(${task.id}, event)">⋮</button>
-                                        ${openMenuId === task.id ? `
-                                            <div class="task-menu">
-                                                <button onclick="moveTaskUp(${project.id}, ${task.id}); event.stopPropagation();">↑ Move Up</button>
-                                                <button onclick="moveTaskDown(${project.id}, ${task.id}); event.stopPropagation();">↓ Move Down</button>
-                                                <button onclick="deleteTask(${project.id}, ${task.id}); event.stopPropagation();">🗑️ Delete</button>
-                                            </div>
-                                        ` : ''}
-                                    </div>
-                                </li>
-                            `).join('')}
-                        </ul>
-
-                        <button class="collapse-toggle-btn" onclick="toggleProjectCollapse(${project.id}, event); event.stopPropagation();">
-                            ${project.collapsed ? '▼ Expand' : '▲ Collapse'}
-                        </button>
-                    </div>
-                `;
-            }).join('');
-        }
-
-        // Close menu when clicking outside
-        document.addEventListener('click', (e) => {
-            if (openMenuId !== null && !e.target.closest('.task-menu-btn')) {
-                openMenuId = null;
-                renderProjects();
-            }
-            if (openProjectMenuId !== null && !e.target.closest('.project-menu-btn')) {
-                openProjectMenuId = null;
-                renderProjects();
-            }
-        });
-
-        // Load projects on page load
-        loadProjects();
+        // Initialize
+        loadData();
+        renderCalendar();
     </script>
 </body>
 </html>
